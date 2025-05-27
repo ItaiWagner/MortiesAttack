@@ -1,0 +1,213 @@
+/*
+Morty - one morty
+ */
+class Morty {
+    field boolean isAlive; // is in game
+    field boolean isTerminating; // in Terminating state
+    field int x, y;
+    field boolean toLeft;
+    field int offset;
+
+    constructor Morty new() {
+        return this;
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** mark as active, i.e. morty is in game **/
+    method void activate(int Ax, int Ay) {
+        let isAlive = true;
+        let isTerminating = false;
+        let x = Ax;
+        let y = Ay;
+        return;
+    }
+
+    /** disable **/
+    method void deactivate() {
+        let isAlive = false;
+        let isTerminating = false;
+        do erase();
+        return;
+    }
+
+    /** getters **/
+    method int getX() { return x; }
+    method int getY() { return y; }
+    method boolean isAlive() { return isAlive; }
+
+    /** terminates a morty **/
+    method void terminate() {
+        let isTerminating = true;
+        do erase();
+        do deactivate();
+        return;
+    }
+
+    /** render morty **/
+    method void draw() {
+        var int memAddress;
+        let memAddress = 16384 + (x/16) + (y*32);
+        // column 0
+        do Memory.poke(memAddress +160, 2032);
+        do Memory.poke(memAddress, 0);
+        do Memory.poke(memAddress +32, 0);
+        do Memory.poke(memAddress +64, 0);
+        do Memory.poke(memAddress +96, 0);
+        do Memory.poke(memAddress +128, 0);
+        do Memory.poke(memAddress +192, 6156);
+        do Memory.poke(memAddress +224, 8194);
+        do Memory.poke(memAddress +256, 18417);
+        do Memory.poke(memAddress +288, 22541);
+        do Memory.poke(memAddress +320, -24574);
+        do Memory.poke(memAddress +352, -24254);
+        do Memory.poke(memAddress +384, -12743);
+        do Memory.poke(memAddress +416, -11963);
+        do Memory.poke(memAddress +448, -10923);
+        do Memory.poke(memAddress +480, -28348);
+        do Memory.poke(memAddress +512, -29000);
+        do Memory.poke(memAddress +544, 24579);
+        do Memory.poke(memAddress +576, 9186);
+        do Memory.poke(memAddress +608, 4100);
+        do Memory.poke(memAddress +640, 4088);
+        do Memory.poke(memAddress +672, 5140);
+        do Memory.poke(memAddress +704, 7196);
+        do Memory.poke(memAddress +736, 5140);
+        do Memory.poke(memAddress +768, 3224);
+        do Memory.poke(memAddress +800, 1168);
+        do Memory.poke(memAddress +832, 992);
+        // column 1
+        do Memory.poke(memAddress +321, 0);
+        do Memory.poke(memAddress +161, 0);
+        do Memory.poke(memAddress +193, 0);
+        do Memory.poke(memAddress +225, 0);
+        do Memory.poke(memAddress +257, 0);
+        do Memory.poke(memAddress +289, 0);
+        do Memory.poke(memAddress +353, 0);
+        do Memory.poke(memAddress +385, 0);
+        do Memory.poke(memAddress +417, 0);
+        do Memory.poke(memAddress +449, 0);
+        do Memory.poke(memAddress +481, 0);
+        do Memory.poke(memAddress +513, 0);
+        // column -1
+        do Memory.poke(memAddress +319, ~32767);
+        do Memory.poke(memAddress +159, 0);
+        do Memory.poke(memAddress +191, 0);
+        do Memory.poke(memAddress +223, 0);
+        do Memory.poke(memAddress +255, 0);
+        do Memory.poke(memAddress +287, 0);
+        do Memory.poke(memAddress +351, ~32767);
+        do Memory.poke(memAddress +383, ~32767);
+        do Memory.poke(memAddress +415, ~32767);
+        do Memory.poke(memAddress +447, ~32767);
+        do Memory.poke(memAddress +479, ~32767);
+        do Memory.poke(memAddress +511, ~32767);
+        return;
+    }
+
+    /** erasing a morty **/
+    method void erase() {
+        var int memAddress;
+        let memAddress = 16384 + (x/16) + (y*32);
+        // column 0
+        do Memory.poke(memAddress +160, 0);
+        do Memory.poke(memAddress, 0);
+        do Memory.poke(memAddress +32, 0);
+        do Memory.poke(memAddress +64, 0);
+        do Memory.poke(memAddress +96, 0);
+        do Memory.poke(memAddress +128, 0);
+        do Memory.poke(memAddress +192, 0);
+        do Memory.poke(memAddress +224, 0);
+        do Memory.poke(memAddress +256, 0);
+        do Memory.poke(memAddress +288, 0);
+        do Memory.poke(memAddress +320, 0);
+        do Memory.poke(memAddress +352, 0);
+        do Memory.poke(memAddress +384, 0);
+        do Memory.poke(memAddress +416, 0);
+        do Memory.poke(memAddress +448, 0);
+        do Memory.poke(memAddress +480, 0);
+        do Memory.poke(memAddress +512, 0);
+        do Memory.poke(memAddress +544, 0);
+        do Memory.poke(memAddress +576, 0);
+        do Memory.poke(memAddress +608, 0);
+        do Memory.poke(memAddress +640, 0);
+        do Memory.poke(memAddress +672, 0);
+        do Memory.poke(memAddress +704, 0);
+        do Memory.poke(memAddress +736, 0);
+        do Memory.poke(memAddress +768, 0);
+        do Memory.poke(memAddress +800, 0);
+        do Memory.poke(memAddress +832, 0);
+        // column 1
+        do Memory.poke(memAddress +321, 0);
+        do Memory.poke(memAddress +161, 0);
+        do Memory.poke(memAddress +193, 0);
+        do Memory.poke(memAddress +225, 0);
+        do Memory.poke(memAddress +257, 0);
+        do Memory.poke(memAddress +289, 0);
+        do Memory.poke(memAddress +353, 0);
+        do Memory.poke(memAddress +385, 0);
+        do Memory.poke(memAddress +417, 0);
+        do Memory.poke(memAddress +449, 0);
+        do Memory.poke(memAddress +481, 0);
+        do Memory.poke(memAddress +513, 0);
+        // column -1
+        do Memory.poke(memAddress +319, 0);
+        do Memory.poke(memAddress +159, 0);
+        do Memory.poke(memAddress +191, 0);
+        do Memory.poke(memAddress +223, 0);
+        do Memory.poke(memAddress +255, 0);
+        do Memory.poke(memAddress +287, 0);
+        do Memory.poke(memAddress +351, 0);
+        do Memory.poke(memAddress +383, 0);
+        do Memory.poke(memAddress +415, 0);
+        do Memory.poke(memAddress +447, 0);
+        do Memory.poke(memAddress +479, 0);
+        do Memory.poke(memAddress +511, 0);
+        return;
+    }
+
+    /** move morty down and sideways **/
+    method void moveDown() {
+        if (y < 230) {
+            do erase(); // clear
+            let y = y + 2; // shift morty lower
+            if (toLeft) { // if swaying to the left
+                if (offset < 8) { // sway it further to the left
+                    let x = x - 2;
+                    let offset = offset + 1;
+                }
+                else { // or switch swaying to the right
+                    let toLeft = false;
+                    let offset = 0;
+                }
+            }
+            else {
+                if (offset < 8) { // sway it further to the right
+                    let x = x + 2;
+                    let offset = offset + 1;
+                }
+                else { // or switch swaying to the left
+                    let toLeft = true;
+                    let offset = 0;
+                }
+            }
+            do draw();
+        }
+        return;
+    }
+
+    /** perform whatever is necessary in current state, gets called from programs mainloop **/
+    method void run() {
+        if (~isAlive) { return; }
+        if (~isTerminating) { // if active and not terminating, render floating animation
+            do moveDown();
+        }
+        else { // otherwise if active
+            do terminate();
+        }
+        return;
+    }
+}

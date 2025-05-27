@@ -1,0 +1,174 @@
+/*
+Morties Attack - space invader version with rick and morty
+ */
+class MortiesAttack {
+    field Rick rick; // players model
+    field BulletSet bullets; // bullets that player can fire
+    field MortySet morties; // morties set
+    field int direction; // the player's current direction
+    // 0=none, 3=left, 4=right
+    field int skipTurnsBetweenShots; // counter that prevents from firing all bullets all at once
+    field int mortyFloatInterval; // counter that prevents morties from moving too fast
+    field Rick endRick;
+    field Rick initRick;
+    field Array praises;
+    field int pCount;
+
+    constructor MortiesAttack new() {
+        // init player's model in the middle of the bottom of the screen
+        let direction = 0;  // initial state is no movement
+        let praises = Array.new(10);
+        let pCount = 0;
+        let praises[0] = "NICE!";
+        let praises[1] = "KEEP GOING!";
+        let praises[2] = "YOUR'E SAVING THE WORLD!";
+        let praises[3] = "WUBADUBA DOO!";
+        let praises[4] = "TAKE THIS MORTY!";
+        let praises[5] = "LET'S GO!";
+        let praises[6] = "YOUR'E ALMOST THERE!";
+        let praises[7] = "I'M PICKLE RICK!";
+        let praises[8] = "SUMMER I NEED SOME HELP!";
+        let praises[9] = "LET'S GO!";
+        return this;
+    }
+
+    method void dispose() {
+        do rick.dispose();
+        do bullets.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** move rick depending on direction **/
+    method void movePlayer() {
+        if (direction = 3) { do rick.moveLeft(); }
+        if (direction = 4) { do rick.moveRight(); }
+        if (direction > 0) { let direction = 0; }
+        return;
+    }
+
+    method void endGameWin() {
+        do Screen.clearScreen();
+        do Output.moveCursor(7, 7);
+        do Output.printString("  SOMETIMES SCIENCE IS MORE ART THAN SCIENCE, MORTY.");
+        do Output.moveCursor(8, 7);
+        do Output.printString("            LOT OF PEOPLE DON'T GET THAT");
+        do Output.moveCursor(9, 7);
+        do Output.printString("               (RICK SANCHEZ, S01E06)");
+        let endRick = Rick.new(230, 30);
+        return;
+    }
+
+    method void endGameLoose() {
+        do Screen.clearScreen();
+        do Output.moveCursor(7, 20);
+        do Output.printString("  YOU ARE A PIECE OF");
+        do Output.moveCursor(8, 20);
+        do Output.printString("SHIT AND I CAN PROVE IT");
+        do Output.moveCursor(9, 20);
+        do Output.printString("    MATHEMATICALLY");
+        let endRick = Rick.new(230, 30);
+        return;
+    }
+
+    method void printPraise() {
+        if (pCount > 8) {
+            let pCount = 0;
+        }
+        do Output.moveCursor(1, 5);
+        do Output.printString("                         ");
+        do Output.moveCursor(1, 5);
+        do Output.printString(praises[pCount]);
+        let pCount = pCount + 1;
+        return;
+    }
+
+
+    /** programs mainloop **/
+    method void run() {
+        var char key;  // the key currently pressed by the user
+        var boolean exit;
+        let exit = false;
+        
+        let initRick = Rick.new(230, 30);
+        do Output.moveCursor(7, 25);
+        do Output.printString("MORTIES ATTACK");
+        do Output.moveCursor(8, 5);
+        do Output.printString("Mission: Destroy all morties before the world's gonna end!");
+        do Output.moveCursor(9, 5);
+        do Output.printString("Use SPACE to shoot, and -> and <- to move right and left");
+        do Output.moveCursor(14, 21);
+        do Output.printString("PRESS SPACE TO START!");
+
+        while (~exit) {
+            let key = Keyboard.keyPressed();
+            if (key = 32) {
+                let exit = true;
+            }
+            do Sys.wait(10);
+        }
+
+        do Screen.clearScreen();
+        let bullets = BulletSet.new();
+        let morties = MortySet.new();
+        do morties.activate();
+        let rick = Rick.new(248, 220);
+        let exit = false;
+
+        while (~exit) {
+            let key = Keyboard.keyPressed();
+            if (key = 81)  { let exit = true; }     // q key
+            if (key = 32)  { // space key
+                // limit fire rate, rick can fire every 20 * 5 mainloop "ticks"
+                if (skipTurnsBetweenShots > 20) {
+                    let skipTurnsBetweenShots = 0;
+                }
+                else {
+                    if (skipTurnsBetweenShots = 0) {
+                        // launch bullet from rick's coord
+                        do bullets.fire(rick.getX(), rick.getY() - 16);
+                        do printPraise();
+                    }
+                    let skipTurnsBetweenShots = skipTurnsBetweenShots + 1;
+                }
+            }
+            if (key = 130) { let direction = 3; }   // left arrow
+            if (key = 132) { let direction = 4; }   // right arrow
+
+            // morties can move every 22 * 5 mainloop "ticks"
+            if (mortyFloatInterval > 22) {
+                let mortyFloatInterval = 0;
+            } else {
+                if (mortyFloatInterval = 0) { do morties.run(); }
+                let mortyFloatInterval = mortyFloatInterval + 1;
+            }
+
+            // move player according to direction variable value
+            do movePlayer();
+            // run bullet's mainloop, pass morties set in there
+            // to detect collisions of morties with bullets
+            do bullets.run(morties);
+
+            // if no morties are left alive, the game is finished
+            if (~morties.anyAliveMorty()) {
+                do endGameWin();
+                let exit = true;
+            }
+            else {
+                // if a morty reaches end of the screen, game is over
+                // morties don't get renewed, so it is possible to kill them all
+                if (morties.reachedEnd()) {
+                    do endGameLoose();
+                    let exit = true;
+                }
+            }
+
+            // sleep
+            do Sys.wait(5);
+        }
+        return;
+    }
+}
+
+
+

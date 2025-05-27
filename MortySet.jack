@@ -1,0 +1,138 @@
+/*
+MortySet - a collection of morties with some helpful functions.
+ */
+class MortySet {
+    /* pool of morties */
+    field Morty morty01;
+    field Morty morty02;
+    field Morty morty03;
+    field Morty morty04;
+    field Morty morty05;
+    field Morty morty06;
+    field Morty morty07;
+    field Morty morty08;
+    field Morty morty09;
+    field Morty morty10;
+
+
+    constructor MortySet new() {
+        let morty01 = Morty.new();
+        let morty02 = Morty.new();
+        let morty03 = Morty.new();
+        let morty04 = Morty.new();
+        let morty05 = Morty.new();
+        let morty06 = Morty.new();
+        let morty07 = Morty.new();
+        let morty08 = Morty.new();
+        let morty09 = Morty.new();
+        let morty10 = Morty.new();
+        return this;
+    }
+
+    /** return true if any morty reached the bottom of the screen **/
+    method boolean reachedEnd() {
+        if (mortyReachedEnd(morty01)) {
+            return true;
+        } else { if (mortyReachedEnd(morty02)) {
+            return true;
+        } else { if (mortyReachedEnd(morty03)) {
+            return true;
+        } else { if (mortyReachedEnd(morty04)) {
+            return true;
+        } else { if (mortyReachedEnd(morty05)) {
+            return true;
+        } else { if (mortyReachedEnd(morty06)) {
+            return true;
+        } else { if (mortyReachedEnd(morty07)) {
+            return true;
+        } else { if (mortyReachedEnd(morty08)) {
+            return true;
+        } else { if (mortyReachedEnd(morty09)) {
+            return true;
+        } else { if (mortyReachedEnd(morty10)) {
+            return true;
+        }}}}}}}}}}
+        return false;
+    }
+
+    /** returns true if at least one morty is alive **/
+    method boolean anyAliveMorty() {
+        if (morty01.isAlive()) { return true; }
+        if (morty02.isAlive()) { return true; }
+        if (morty03.isAlive()) { return true; }
+        if (morty04.isAlive()) { return true; }
+        if (morty05.isAlive()) { return true; }
+        if (morty06.isAlive()) { return true; }
+        if (morty07.isAlive()) { return true; }
+        if (morty08.isAlive()) { return true; }
+        if (morty09.isAlive()) { return true; }
+        if (morty10.isAlive()) { return true; }
+        return false;
+    }
+
+    /** check if a particular morty reached the bottom of the screen **/
+    method boolean mortyReachedEnd(Morty e) {
+        return (e.getY() > 229);
+    }
+
+    /** try to find collisions with bullets for each morty **/
+    method void checkIfHit(BulletSet bs) {
+        do bs.handleOneMortyDown(morty01);
+        do bs.handleOneMortyDown(morty02);
+        do bs.handleOneMortyDown(morty03);
+        do bs.handleOneMortyDown(morty04);
+        do bs.handleOneMortyDown(morty05);
+        do bs.handleOneMortyDown(morty06);
+        do bs.handleOneMortyDown(morty07);
+        do bs.handleOneMortyDown(morty08);
+        do bs.handleOneMortyDown(morty09);
+        do bs.handleOneMortyDown(morty10);
+        return;
+    }
+
+    /** spawn morties on screen **/
+    method void activate() {
+        do morty01.activate(45, 20);
+        do morty02.activate(90, 30);
+        do morty03.activate(135, 40);
+        do morty04.activate(180, 20);
+        do morty05.activate(225, 15);
+        do morty06.activate(270, 30);
+        do morty07.activate(315, 20);
+        do morty08.activate(360, 50);
+        do morty09.activate(405, 10);
+        do morty10.activate(450, 20);
+        return;
+    }
+
+    method void dispose() {
+        do morty01.dispose();
+        do morty02.dispose();
+        do morty03.dispose();
+        do morty04.dispose();
+        do morty05.dispose();
+        do morty06.dispose();
+        do morty07.dispose();
+        do morty08.dispose();
+        do morty09.dispose();
+        do morty10.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+
+    /** called from mainloop, does whatever is necessary for morty in current state **/
+    method void run() {
+        do morty01.run();
+        do morty02.run();
+        do morty03.run();
+        do morty04.run();
+        do morty05.run();
+        do morty06.run();
+        do morty07.run();
+        do morty08.run();
+        do morty09.run();
+        do morty10.run();
+        return;
+    }
+}

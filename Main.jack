@@ -1,0 +1,18 @@
+/*
+Main function launches game.
+
+It's a space invaders version where the jet is Rick and the enemies are morties from Rick And Morty TV Show. 
+Rick can move left and right, and shoot at the morties.
+If all enemies are shot down you win, otherwise, you loose.
+
+
+ */
+class Main {
+    function void main() {
+        var MortiesAttack game;
+        let game = MortiesAttack.new();
+        do game.run();
+        do game.dispose();
+        return;
+    }
+}
